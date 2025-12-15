@@ -10,11 +10,19 @@
 
 <script setup lang="ts">
   import { useRouter } from 'vue-router';
+  import { onMounted } from 'vue';
+  import request from '@/utils/request';
   const router = useRouter();
   function toNews() {
     // 跳转到新闻页面
     router.push('/news')
   }
+  onMounted(() => {
+    const token = localStorage.getItem('token')
+    request.get('/getTokenInfo', { params: { token } }).then(res => {
+      console.log(res.data);
+    });
+  });
 </script>
 
 <style scoped>
