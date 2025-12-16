@@ -32,7 +32,6 @@ import { useRouter } from 'vue-router';
 import request from '@/utils/request'
 
 const router = useRouter();
-// 定义登录表单数据
 const loginForm = reactive({
   username: 'root',
   password: '123456'
