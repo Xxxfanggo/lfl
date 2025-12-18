@@ -18,7 +18,7 @@ service.interceptors.request.use(config => {
     config.headers.Authorization = token
   } else {
     // 如果没有token且不是登录请求，则跳转到登录页面
-    if (config.url !== '/login') {
+    if (config.url !== '/login' && config.url !== '/oauth2/github/callback' ) {
       router.push('/login')
       // 取消请求
       return Promise.reject(new Error('未登录，请先登录'))
