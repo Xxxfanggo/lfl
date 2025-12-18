@@ -96,11 +96,10 @@ onMounted(() => {
     localStorage.removeItem('github_oauth_state')
     
     // 发送code到后端服务器换取access_token
-    // 注意：这个操作应该由后端完成，因为需要client_secret，不能暴露在前端
     request.get('/oauth2/github/callback', {params: { code }}).then(res => {
-      if (res.data && res.data.token) {
+      if (res.data && res.data.jwtToken) {
         // 保存token并跳转到首页
-        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('token', res.data.jwtToken)
         router.push('/home')
       }
     }).catch(error => {
