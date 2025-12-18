@@ -21,17 +21,32 @@
           />
         </div>
         <button @click="handleLogin" class="login-button">登录</button>
+        
+        <!-- 第三方登录 -->
+        <div class="social-login">
+          <div class="social-title">第三方登录</div>
+          <div class="social-icons">
+            <button class="social-icon github" @click="handleGithubLogin">
+              <span class="icon-text">G</span>
+            </button>
+            <button class="social-icon wechat" @click="handleWechatLogin">
+              <span class="icon-text">W</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router';
+import { reactive, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router';
 import request from '@/utils/request'
 
 const router = useRouter();
+const route = useRoute();
+
 const loginForm = reactive({
   username: 'root',
   password: '123456'
@@ -48,6 +63,54 @@ const handleLogin = () => {
     console.error('登录失败:', error);
   })
 }
+
+// GitHub登录
+const handleGithubLogin = () => {
+  const clientId = 'Ov23liaZ5kfjIoXDBJmm'
+  const rawRedirectUrl = window.location.origin + '/login';
+  const redirectUri = encodeURIComponent(rawRedirectUrl); 
+  const scope = 'user:email'
+  // 防止CSRF攻击的随机字符串
+  const state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+  // 保存state到localStorage，用于后续验证
+  localStorage.setItem('github_oauth_state', state)
+  window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`
+}
+
+// 微信登录
+const handleWechatLogin = () => {
+  console.log('微信登录');
+  // 这里可以添加微信登录逻辑
+}
+
+// 处理GitHub OAuth回调
+onMounted(() => {
+  // 检查是否有GitHub OAuth的回调参数
+  const code = route.query.code
+  const state = route.query.state
+  const storedState = localStorage.getItem('github_oauth_state')
+  
+  // 如果有code参数，说明是GitHub OAuth回调
+  if (code && state && state === storedState) {
+    // 清除存储的state
+    localStorage.removeItem('github_oauth_state')
+    
+    // 发送code到后端服务器换取access_token
+    // 注意：这个操作应该由后端完成，因为需要client_secret，不能暴露在前端
+    request.post('/auth/github/callback', { code, state }).then(res => {
+      if (res.data && res.data.token) {
+        // 保存token并跳转到首页
+        localStorage.setItem('token', res.data.token)
+        router.push('/home')
+      }
+    }).catch(error => {
+      console.error('GitHub登录失败:', error)
+    })
+  } else if (code || state) {
+    // state不匹配或者只有其中一个参数，可能是攻击
+    console.error('GitHub OAuth state不匹配或参数不完整')
+  }
+})
 </script>
 
 <style scoped>
@@ -122,6 +185,7 @@ const handleLogin = () => {
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 20px;
 }
 
 .login-button:hover {
@@ -131,5 +195,70 @@ const handleLogin = () => {
 
 .login-button:active {
   transform: translateY(0);
+}
+
+.social-login {
+  margin-top: 30px;
+}
+
+.social-title {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.social-title::before,
+.social-title::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 30%;
+  height: 1px;
+  background: #eee;
+}
+
+.social-title::before {
+  left: 0;
+}
+
+.social-title::after {
+  right: 0;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+  font-weight: bold;
+  color: white;
+}
+
+.social-icon:hover {
+  transform: scale(1.1);
+}
+
+.github {
+  background: #333;
+}
+
+.wechat {
+  background: #07c160;
+}
+
+.icon-text {
+  font-size: 16px;
 }
 </style>
