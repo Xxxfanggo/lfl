@@ -18,10 +18,11 @@
     router.push('/news')
   }
   onMounted(() => {
-    const token = localStorage.getItem('token')
-    request.get('/getTokenInfo', { params: { token } }).then(res => {
-      console.log(res.data);
-    });
+    let token = localStorage.getItem('token')
+    token = (token?.substring(7) || null) as string | null
+    // request.get('/getTokenInfo', { params: { token } }).then(res => {
+    //   console.log(res.data);
+    // });
   });
 </script>
 

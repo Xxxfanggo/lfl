@@ -48,7 +48,7 @@ const router = useRouter();
 const route = useRoute();
 
 const loginForm = reactive({
-  username: 'root',
+  username: 'admin',
   password: '123456'
 })
 
