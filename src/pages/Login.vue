@@ -30,7 +30,7 @@
               <span class="icon-text">G</span>
             </button>
             <button class="social-icon wechat" @click="handleWechatLogin">
-              <span class="icon-text">W</span>
+              <span class="icon-text">T</span>
             </button>
           </div>
         </div>
@@ -80,7 +80,16 @@ const handleGithubLogin = () => {
 // 微信登录
 const handleWechatLogin = () => {
   console.log('微信登录');
-  // 这里可以添加微信登录逻辑
+  // 这里可以添加微信登录逻辑  twd认证中心
+  const clientId = 'client_lTmdIuBIkLioHyBc'
+  const rawRedirectUrl = window.location.origin + '/login';
+  const redirectUri = encodeURIComponent(rawRedirectUrl); 
+  const scope = 'read:write'
+  // 防止CSRF攻击的随机字符串
+  const state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+  // 保存state到localStorage，用于后续验证
+  localStorage.setItem('twd_oauth_state', state)
+  window.location.href = `http://10.119.1.225:8082/auth/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`
 }
 
 // 处理GitHub OAuth回调
