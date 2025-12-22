@@ -4,24 +4,14 @@
       <div class="login-form">
         <h2>用户登录</h2>
         <div class="form-group">
-          <input 
-            v-model="loginForm.username" 
-            placeholder="请输入用户名" 
-            class="form-input"
-            @keyup.enter="handleLogin"
-          />
+          <input v-model="loginForm.username" placeholder="请输入用户名" class="form-input" @keyup.enter="handleLogin" />
         </div>
         <div class="form-group">
-          <input 
-            v-model="loginForm.password" 
-            placeholder="请输入密码" 
-            type="password" 
-            class="form-input"
-            @keyup.enter="handleLogin"
-          />
+          <input v-model="loginForm.password" placeholder="请输入密码" type="password" class="form-input"
+            @keyup.enter="handleLogin" />
         </div>
         <button @click="handleLogin" class="login-button">登录</button>
-        
+  
         <!-- 第三方登录 -->
         <div class="social-login">
           <div class="social-title">第三方登录</div>
@@ -68,7 +58,7 @@ const handleLogin = () => {
 const handleGithubLogin = () => {
   const clientId = 'Ov23liaZ5kfjIoXDBJmm'
   const rawRedirectUrl = window.location.origin + '/login';
-  const redirectUri = encodeURIComponent(rawRedirectUrl); 
+  const redirectUri = encodeURIComponent(rawRedirectUrl);
   const scope = 'user:email'
   // 防止CSRF攻击的随机字符串
   const state = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
@@ -97,15 +87,29 @@ onMounted(() => {
   // 检查是否有GitHub OAuth的回调参数
   const code = route.query.code
   const state = route.query.state
-  const storedState = localStorage.getItem('github_oauth_state')
-  
+  const gitHubStoredState = localStorage.getItem('github_oauth_state')
+  const twdHubStoredState = localStorage.getItem('twd_oauth_state')
+
   // 如果有code参数，说明是GitHub OAuth回调
-  if (code && state && state === storedState) {
+  if (code && state && state === gitHubStoredState) {
     // 清除存储的state
     localStorage.removeItem('github_oauth_state')
-    
+
     // 发送code到后端服务器换取access_token
-    request.get('/oauth2/github/callback', {params: { code }}).then(res => {
+    request.get('/oauth2/github/callback', { params: { code } }).then(res => {
+      if (res.data && res.data.jwtToken) {
+        // 保存token并跳转到首页
+        localStorage.setItem('token', res.data.jwtToken)
+        router.push('/home')
+      }
+    }).catch(error => {
+      console.error('GitHub登录失败:', error)
+    })
+  } else if (code && state && state === twdHubStoredState) {
+    localStorage.removeItem('twd_oauth_state')
+
+    // 发送code到后端服务器换取access_token
+    request.get('/oauth2/twd/callback', { params: { code } }).then(res => {
       if (res.data && res.data.jwtToken) {
         // 保存token并跳转到首页
         localStorage.setItem('token', res.data.jwtToken)
