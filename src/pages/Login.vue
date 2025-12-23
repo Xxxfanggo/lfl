@@ -19,7 +19,7 @@
             <button class="social-icon github" @click="handleGithubLogin">
               <span class="icon-text">G</span>
             </button>
-            <button class="social-icon wechat" @click="handleWechatLogin">
+            <button class="social-icon wechat" @click="handleTwdLogin">
               <span class="icon-text">T</span>
             </button>
           </div>
@@ -67,11 +67,9 @@ const handleGithubLogin = () => {
   window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`
 }
 
-// 微信登录
-const handleWechatLogin = () => {
-  console.log('微信登录');
-  // 这里可以添加微信登录逻辑  twd认证中心
-  const clientId = 'client_lTmdIuBIkLioHyBc'
+const handleTwdLogin = () => {
+  // twd认证中心
+  const clientId = 'client_GLECF2zZcKfr2ict'
   const rawRedirectUrl = window.location.origin + '/login';
   const redirectUri = encodeURIComponent(rawRedirectUrl); 
   const scope = 'read:write'
@@ -116,11 +114,11 @@ onMounted(() => {
         router.push('/home')
       }
     }).catch(error => {
-      console.error('GitHub登录失败:', error)
+      console.error('twd登录失败:', error)
     })
   } else if (code || state) {
     // state不匹配或者只有其中一个参数，可能是攻击
-    console.error('GitHub OAuth state不匹配或参数不完整')
+    console.error('twd OAuth state不匹配或参数不完整')
   }
 })
 </script>
