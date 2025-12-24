@@ -23,6 +23,15 @@
     // request.get('/getTokenInfo', { params: { token } }).then(res => {
     //   console.log(res.data);
     // });
+
+    request.get('/testFilter', {headers: {
+      Authorization: token
+    }}).then(res => {
+      console.log(res.data);
+    })
+    request.get('/testHasAnyAuthority').then(res => {
+      console.log(res.data);
+    })
   });
 </script>
 
