@@ -39,7 +39,7 @@ service.interceptors.response.use(
   error => {
     if (error.response && error.response.status === 401) {
       // 清除本地token
-      localStorage.removeItem('token');
+      localStorage.removeItem(TOKEN_KEY);
       // 跳转到登录页
       router.push('/login');
     }
