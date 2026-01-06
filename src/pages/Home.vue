@@ -11,6 +11,7 @@
 <script setup lang="ts">
   import { useRouter } from 'vue-router';
   import { onMounted } from 'vue';
+  import { TOKEN_KEY } from '@/const/jwt';
   import request from '@/utils/request';
   const router = useRouter();
   function toNews() {
@@ -18,7 +19,7 @@
     router.push('/news')
   }
   onMounted(() => {
-    let token = localStorage.getItem('token')
+    let token = localStorage.getItem(TOKEN_KEY)
     token = (token?.substring(7) || null) as string | null
     // request.get('/getTokenInfo', { params: { token } }).then(res => {
     //   console.log(res.data);

@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import { reactive, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router';
+import { TOKEN_KEY } from '@/const/jwt'
 import request from '@/utils/request'
 
 const router = useRouter();
@@ -45,8 +46,10 @@ const loginForm = reactive({
 // 处理登录逻辑
 const handleLogin = () => {
   request.post("/login", loginForm).then(res => {
+    console.log(res);
+    
     if (res.data) {
-      localStorage.setItem('token', res.data)
+      localStorage.setItem(TOKEN_KEY, res.data)
       router.push('/home')
     }
   }).catch(error => {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import router from "@/router"; // 引入路由实例
+import { TOKEN_KEY, JWT_PREFIX } from "@/const/jwt";
 
 const baseURL = 'http://localhost:8089/lbl'
 const service = axios.create({
@@ -12,10 +13,10 @@ service.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=UTF-8'
   }
   
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem(TOKEN_KEY)
   
   if (token) {
-    config.headers.Authorization = token
+    config.headers.Authorization = JWT_PREFIX + token
   } else {
     // 如果没有token且不是登录请求，则跳转到登录页面
     if (config.url !== '/login' && config.url !== '/oauth2/github/callback'&& config.url !== '/oauth2/twd/callback' ) {
