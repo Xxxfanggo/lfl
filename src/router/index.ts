@@ -9,6 +9,7 @@ import PiniaView from "@/pages/PiniaView.vue";
 import RefsParent from '@/pages/communications/refs-parent/Father.vue';
 import ProvideInject from '@/pages/communications/provide-inject/Father.vue'
 import Slot from '@/pages/communications/slot/Father.vue'
+import Child from "@/pages/communications/provide-inject/Child.vue";
 
 
 const routes = [
@@ -82,16 +83,30 @@ const routes = [
         path: '/piniaView',
         component: PiniaView,
       },
-      {
-        path: '',
-        redirect: '/home'
-      }
+      // {
+      //   path: '',
+      //   redirect: '/home'
+      // }
     ]
   },
   // 独立的登录路由，不在主布局中显示
   {
-    path: '/login',
-    component: () => import('@/pages/Login.vue')
+    path: '',
+    redirect: '/login',
+    component: () => import('@/pages/welcome/index.vue'),
+    children:  [
+      {
+        name: 'login',
+        path: '/login',
+        component: () => import('@/pages/welcome/login/index.vue'),
+      },
+      {
+        name: 'register',
+        path: '/register',
+        component: () => import('@/pages/welcome/register/index.vue'),
+      }
+
+    ]
   }
 ]
 
