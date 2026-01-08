@@ -7,6 +7,7 @@
       <router-link :to="{name: 'xinwen'}" active-class="active">新闻</router-link>
       <router-link :to="{path: '/about'}" active-class="active">关于</router-link> 
       <router-link :to="{path: '/piniaView'}" active-class="active">Pinia</router-link>
+      <router-link :to="{name: 'analyzeFile'}" active-class="active">文件分析</router-link>
     </div>
     <div class="content">
       <router-view></router-view>

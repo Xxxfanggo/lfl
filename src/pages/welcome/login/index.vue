@@ -100,7 +100,7 @@ onMounted(() => {
     localStorage.removeItem('github_oauth_state')
 
     // 发送code到后端服务器换取access_token
-    request.get('/oauth2/github/callback', { params: { code } }).then(res => {
+    request.get('/oauth2/github/callback', { params: { code, state } }).then(res => {
       if (res.data && res.data.jwtToken) {
         // 保存token并跳转到首页
         localStorage.setItem('token', res.data.jwtToken)

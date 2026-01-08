@@ -33,6 +33,8 @@
     </div>
   </div>
 </template>
+<script setup="ts">
+</script>
 <style scoped>
 .about-box {
   display: flex;

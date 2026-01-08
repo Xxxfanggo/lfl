@@ -7,6 +7,7 @@ import RefsParent from '@/pages/communications/refs-parent/Father.vue';
 import ProvideInject from '@/pages/communications/provide-inject/Father.vue'
 import Slot from '@/pages/communications/slot/Father.vue'
 import Child from "@/pages/communications/provide-inject/Child.vue";
+import AnalyzeFile from '@/pages/AnalyzeFile/index.vue'
 
 
 export const constantRouter = [
@@ -80,6 +81,11 @@ export const constantRouter = [
         path: '/piniaView',
         component: PiniaView,
       },
+      {
+        name: 'analyzeFile',
+        path: '/analyzeFile',
+        component: AnalyzeFile,
+      }
       // {
       //   path: '',
       //   redirect: '/home'
