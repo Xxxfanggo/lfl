@@ -14,17 +14,10 @@ service.interceptors.request.use(config => {
   }
   
   const token = localStorage.getItem(TOKEN_KEY)
-  
-  if (token) {
-    config.headers.Authorization = JWT_PREFIX + token
-  } else {
-    // 如果没有token且不是登录请求，则跳转到登录页面
-    if (config.url !== '/login' && config.url !== '/oauth2/github/callback'&& config.url !== '/oauth2/twd/callback' ) {
-      router.push('/login')
-      // 取消请求
-      return Promise.reject(new Error('未登录，请先登录'))
-    }
+  if (!token) {
+    return config
   }
+  config.headers.Authorization = JWT_PREFIX + token
   return config;
 }, function (error) {
   // 对请求错误做些什么

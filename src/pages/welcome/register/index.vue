@@ -92,6 +92,7 @@ import request from '@/utils/request'
 import { ElMessage } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { onUnmounted } from 'vue'
+import { sendEmail } from '@/api/email'
 
 const router = useRouter();
 const route = useRoute();
@@ -102,10 +103,10 @@ const isRegisterLoading = ref(false);
 let countdownTimer: any = null;
 
 const loginForm = reactive({
-  username: '',
-  password: '',
-  passwordRepeat: '',
-  email: '',
+  username: 'fang',
+  password: 'print123',
+  passwordRepeat: 'print123',
+  email: 'zhongfangyu@wondersgroup.com',
   code: ''
 })
 
@@ -150,12 +151,16 @@ const getVerificationCode = () => {
   }
   
   // 这里可以调用获取验证码的API
-  console.log('获取验证码到邮箱:', loginForm.email);
+  sendEmail(loginForm.email, 'register').then(res => {
+    console.log('获取验证码:', res);
+  }).catch(error => {
+    console.error(error);
+  })
   
-  // 模拟发送验证码
-  ElMessage.success('验证码已发送');
+  // // 模拟发送验证码
+  // ElMessage.success('验证码已发送');
   
-  // 模拟倒计时
+  // // 模拟倒计时
   countdown.value = 60;
   countdownTimer = setInterval(() => {
     countdown.value--;
@@ -176,8 +181,8 @@ const handleRegister = async () => {
     const res = await request.post("/register", loginForm)
     console.log(res);
     
-    if (res.data) {
-      localStorage.setItem(TOKEN_KEY, res.data)
+    if (res.data.code === 200) {
+      // localStorage.setItem(TOKEN_KEY, res.data)
       ElMessage.success('注册成功')
       router.push('/login')
     }
