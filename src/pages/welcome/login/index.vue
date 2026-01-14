@@ -101,9 +101,9 @@ onMounted(() => {
 
     // 发送code到后端服务器换取access_token
     request.get('/oauth2/github/callback', { params: { code, state } }).then(res => {
-      if (res.data && res.data.jwtToken) {
+      if (res.data) {
         // 保存token并跳转到首页
-        localStorage.setItem('token', res.data.jwtToken)
+        localStorage.setItem('token', res.data)
         ElMessage.success('GitHub登录成功')
         router.push('/home')
       }

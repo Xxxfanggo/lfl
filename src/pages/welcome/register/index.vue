@@ -106,7 +106,7 @@ const loginForm = reactive({
   username: 'fang',
   password: 'print123',
   passwordRepeat: 'print123',
-  email: 'zhongfangyu@wondersgroup.com',
+  email: '1486147105@qq.com',
   code: ''
 })
 

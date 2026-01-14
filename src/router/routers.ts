@@ -11,6 +11,36 @@ import AnalyzeFile from '@/pages/AnalyzeFile/index.vue'
 
 
 export const constantRouter = [
+  // 后台管理路由
+  {
+    name: 'admin',
+    path: '/admin',
+    components: {
+      default: () => import('@/components/layout/AdminLayout.vue')
+    },
+    children: [
+      {
+        name: 'user',
+        path: 'user',
+        component: () => import('@/pages/admin/user/index.vue')
+      },
+      {
+        name: 'role',
+        path: 'role',
+        component: () => import('@/pages/admin/role/index.vue')
+      },
+      {
+        name: 'permission',
+        path: 'permission',
+        component: () => import('@/pages/admin/permission/index.vue')
+      },
+      {
+        name: 'menu',
+        path: 'menu',
+        component: () => import('@/pages/admin/menu/index.vue')
+      }
+    ]
+  },
   {
     name: 'main',
     path: '/',
@@ -85,11 +115,11 @@ export const constantRouter = [
         name: 'analyzeFile',
         path: '/analyzeFile',
         component: AnalyzeFile,
+      },
+      {
+        path: '/',
+        redirect: '/home'
       }
-      // {
-      //   path: '',
-      //   redirect: '/home'
-      // }
     ]
   },
   // 独立的登录路由，不在主布局中显示
