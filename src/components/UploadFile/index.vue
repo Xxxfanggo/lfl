@@ -21,7 +21,7 @@
       </div>
       <template #tip>
         <div class="el-upload__tip">
-          只能上传 xlsx/xls 文件，且不超过 10MB，最多可选择3个文件
+          只能上传 xlsx/xls 文件，且不超过 50MB，最多可选择3个文件
         </div>
       </template>
     </el-upload>
@@ -81,14 +81,14 @@ const handleChange = (file, fileList) => {
 const beforeUpload = (file) => {
   const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || 
                   file.type === 'application/vnd.ms-excel'
-  const isLt10M = file.size / 1024 / 1024 < 10
+  const isLt50M = file.size / 1024 / 1024 < 50
 
   if (!isExcel) {
     ElMessage.error('只能上传 Excel 文件!')
     return false
   }
-  if (!isLt10M) {
-    ElMessage.error('上传文件大小不能超过 10MB!')
+  if (!isLt50M) {
+    ElMessage.error('上传文件大小不能超过 50MB!')
     return false
   }
   return true
